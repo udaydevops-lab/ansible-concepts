@@ -1,0 +1,25 @@
+- name: conditions
+  hosts: localhost
+  become: true
+  tasks: 
+    - name: check user exists or not
+      ansible.builtin.command: id expense
+      register: USER
+      ignore_errors: true
+
+    - name: print the user information
+      ansible.builtin.debug:
+        msg: "{{ USER.stdout | default('User does not exist') }}"
+
+    - name: create user
+      ansible.builtin.command: useradd expense
+      when: USER.rc != 0
+      register: NEWUSER
+
+    - name: say Hello to user
+      ansible.builtin.debug:
+        msg: "Hello, new user created. Command output: {{ NEWUSER.stdout }}"
+      when: NEWUSER.rc == 0
+      
+    
+       

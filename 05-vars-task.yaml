@@ -1,0 +1,16 @@
+- name: variables at task level # first it will consider the variables from task level and file level
+  hosts: localhost
+  vars:
+    Course: "DevOps"
+    Trainer: "Siva"
+    Duration: "15hrs"
+  tasks:
+    - name: variables from declaired vars
+      ansible.builtin.debug:
+        msg: "this learning {{Course}}  is from {{Trainer}} with the duration of {{Duration}}"
+
+    - name: task to override variables
+      vars: 
+        Course: "Terraform"   # this task level variables will be preffered first in variable declaration
+      ansible.builtin.debug:
+        msg: "this learning {{Course}}  is from {{Trainer}} with the duration of {{Duration}}"
